@@ -1,71 +1,17 @@
-const SHA256 = require('crypto-js/sha256');
+const {Blockchain, Transaction} = require('./src/blockchain');
+const EC = require('elliptic').ec;
+const ec = new EC('secp256k1');
 
-class Block {
-    constructor(index, timestamp, data, previousHash = '') {
-        this.index = index;
-        this.timestamp = timestamp;
-        this.data = data;
-        this.previousHash = previousHash;
-        this.hash = this.calculateHash();
-        this.nonce = 0;
-    }
-
-    calculateHash() {
-        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nonce).toString();
-    }
-
-    mineBlock(difficulty) {
-        while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")) {
-            this.nonce++;
-            this.hash = this.calculateHash();
-        }
-
-        console.log("Block mined: " + this.hash);
-    }
-}
-
-class Blockchain {
-    constructor() {
-        this.chain = [this.createGenesisBlock()];
-        this.difficulty = 4;
-    }
-
-    createGenesisBlock() {
-        return new Block(0, "12/06/2022", "Genesis block", "0");
-    }
-
-    getLatestBlock() {
-        return this.chain[this.chain.length - 1];
-    }
-
-    addBlock(newBlock) {
-        newBlock.previousHash = this.getLatestBlock().hash;
-        newBlock.mineBlock(this.difficulty);
-        this.chain.push(newBlock);
-    }
-
-    isChainValid() {
-        for (let i = 1; i < this.chain.length; i++) {
-            const currentBlock = this.chain[i];
-            const previousBlock = this.chain[i-1];
-
-            if (currentBlock.hash != currentBlock.calculateHash()) {
-                return false;
-            }
-
-            if (currentBlock.previousHash != previousBlock.hash) {
-                return false;
-            }
-
-            return true;
-        }
-    }
-}
+const myKey = ec.keyFromPrivate('0461ab26c08b6bb3b2ef43251d8298dc91f6e834b195dfd80da533c5d67f7bec');
+const myWalletAddress = myKey.getPublic('hex');
 
 let myCoin = new Blockchain();
 
-console.log('Mining block 1...');
-myCoin.addBlock(new Block(1, "12/06/2022", { amount: 4 }));
+const tx1 = new Transaction(myWalletAddress, 'public key goes here', 10);
+tx1.signTransaction(myKey);
+myCoin.addTransaction(tx1);
 
-console.log('Mining block 2...');
-myCoin.addBlock(new Block(2, "13/06/2022", { amount: 10 }));
+console.log('\nStarting the miner...');
+myCoin.minePendingTransactions(myWalletAddress);
+
+console.log('\nBalance of vinh is ', myCoin.getBalanceOfAddress(myWalletAddress));
