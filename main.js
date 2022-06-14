@@ -7,11 +7,18 @@ const myWalletAddress = myKey.getPublic('hex');
 
 let myCoin = new Blockchain();
 
-const tx1 = new Transaction(myWalletAddress, 'public key goes here', 10);
+myCoin.minePendingTransactions(myWalletAddress);
+
+const tx1 = new Transaction(myWalletAddress, 'address2', 100);
 tx1.signTransaction(myKey);
 myCoin.addTransaction(tx1);
 
-console.log('\nStarting the miner...');
+myCoin.minePendingTransactions(myWalletAddress);
+
+const tx2 = new Transaction(myWalletAddress, 'address1', 50);
+tx2.signTransaction(myKey);
+myCoin.addTransaction(tx2);
+
 myCoin.minePendingTransactions(myWalletAddress);
 
 console.log('\nBalance of vinh is ', myCoin.getBalanceOfAddress(myWalletAddress));

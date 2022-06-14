@@ -7,10 +7,11 @@ class Transaction {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
+        this.timestamp = Date.now();
     }
 
     calculateHash() {
-        return SHA256(this.fromAddress + this.toAddress + this.amount).toString();
+        return SHA256(this.fromAddress + this.toAddress + this.amount + this.timestamp).toString();
     }
 
     signTransaction(signingKey) {
@@ -45,7 +46,7 @@ class Block {
     }
 
     calculateHash() {
-        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nonce).toString();
+        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).toString();
     }
 
     mineBlock(difficulty) {
@@ -77,7 +78,7 @@ class Blockchain {
     }
 
     createGenesisBlock() {
-        return new Block("12/06/2022", "Genesis block", "0");
+        return new Block(Date.parse("2022-06-12"), "", "0");
     }
 
     getLatestBlock() {
@@ -87,11 +88,13 @@ class Blockchain {
     minePendingTransactions(miningRewardAddress) {
         this.pendingTransactions.push(new Transaction(null, miningRewardAddress, this.miningReward));
 
-        let block = new Block(Date.now(), this.pendingTransactions);
+        let block = new Block(Date.now(), this.pendingTransactions, this.getLatestBlock().hash);
         block.mineBlock(this.difficulty);
 
         console.log('Block successfully mined!');
         this.chain.push(block);
+
+        this.pendingTransactions = [];
     }
 
     addTransaction(transaction) {
