@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BlockchainService } from 'src/app/services/blockchain.service';
 
 @Component({
   selector: 'app-settings',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor() { }
+  public blockchain: any;
+
+  constructor(private blockchainService: BlockchainService) { 
+    this.blockchain = blockchainService.blockchainInstance;
+  }
 
   ngOnInit(): void {
   }
