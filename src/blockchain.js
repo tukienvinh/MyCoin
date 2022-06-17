@@ -78,7 +78,7 @@ class Blockchain {
     }
 
     createGenesisBlock() {
-        return new Block(Date.parse("2022-06-12"), "", "0");
+        return new Block(Date.parse("2022-06-12"), [], "0");
     }
 
     getLatestBlock() {
@@ -105,6 +105,34 @@ class Blockchain {
         if (!transaction.isValid()) {
             throw new Error('Cannot add invalid transaction to chain.');
         }
+
+        if (transaction.amount <= 0) {
+            throw new Error('Transaction amount should be higher than 0');
+        }
+        
+        // Check if the amount sent <= existing balance
+        const walletBalance = this.getBalanceOfAddress(transaction.fromAddress);
+        if (walletBalance < transaction.amount) {
+            throw new Error('Not enough balance');
+        }
+    
+        // Get all other pending transactions for the "from" wallet
+        const pendingTxForWallet = this.pendingTransactions
+            .filter(tx => tx.fromAddress === transaction.fromAddress);
+    
+        // If the wallet has more pending transactions, calculate the total amount
+        // of spend coins so far. If this exceeds the balance, we refuse to add this
+        // transaction.
+        if (pendingTxForWallet.length > 0) {
+            const totalPendingAmount = pendingTxForWallet
+                .map(tx => tx.amount)
+                .reduce((prev, curr) => prev + curr);
+        
+            const totalAmount = totalPendingAmount + transaction.amount;
+            if (totalAmount > walletBalance) {
+                throw new Error('Pending transactions for this wallet is higher than its balance.');
+            }
+        }
         
         this.pendingTransactions.push(transaction);
     }
@@ -126,6 +154,20 @@ class Blockchain {
 
         return balance;
     }
+
+    getAllTransactionsForWallet(address) {
+        const txs = [];
+    
+        for (const block of this.chain) {
+          for (const tx of block.transactions) {
+            if (tx.fromAddress === address || tx.toAddress === address) {
+              txs.push(tx);
+            }
+          }
+        }
+    
+        return txs;
+      }
 
     isChainValid() {
         for (let i = 1; i < this.chain.length; i++) {

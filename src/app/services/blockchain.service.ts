@@ -24,6 +24,10 @@ export class BlockchainService {
     return this.blockchainInstance.chain;
   }
 
+  addressIsFromCurrentUser(address: string) {
+    return address === this.walletKeys[0].publicKey;
+  }
+
   addTransaction(tx: any) {
     this.blockchainInstance.addTransaction(tx);
   }
