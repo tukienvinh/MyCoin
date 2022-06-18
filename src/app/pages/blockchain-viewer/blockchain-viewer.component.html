@@ -1,10 +1,13 @@
 <div class="container" style="overflow-x: scroll;white-space: nowrap;">
     <h1>Blocks on chain</h1>
     <p>Each card presents a block on the chain. Click on a block to see the transactions stored inside.</p>
+    <button routerLink="/transaction-history" class="btn btn-dark">View transaction history</button>
 
-    <app-block-view *ngFor="let block of blocks" [block]="block" (click)="showTransactions(block)">
+    <div id="transaction-table">
+        <app-block-view *ngFor="let block of blocks" [block]="block" (click)="showTransactions(block)">
         
-    </app-block-view>
+        </app-block-view>
+    </div>
 </div>
 
 <br><br>

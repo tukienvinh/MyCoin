@@ -166,8 +166,30 @@ class Blockchain {
           }
         }
     
-        return txs;
-      }
+        return txs.reverse();
+    }
+
+    getAllTransactions() {
+        const txs = [];
+    
+        for (const block of this.chain) {
+          for (const tx of block.transactions) {
+            txs.push(tx);
+          }
+        }
+    
+        return txs.reverse();
+    }
+
+    getBlockIndexOfTransaction(transaction) {
+        for (const block of this.chain) {
+            for (const tx of block.transactions) {
+              if (tx.fromAddress === transaction.fromAddress && tx.toAddress === transaction.toAddress) {
+                return this.chain.indexOf(block);
+              }
+            }
+        }
+    }
 
     isChainValid() {
         for (let i = 1; i < this.chain.length; i++) {

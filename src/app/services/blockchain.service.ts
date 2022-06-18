@@ -36,6 +36,14 @@ export class BlockchainService {
     return this.blockchainInstance.pendingTransactions;
   }
 
+  getAllTransactions() {
+    return this.blockchainInstance.getAllTransactions();
+  }
+
+  getBlockIndexOfTransaction(tx: any) {
+    return this.blockchainInstance.getBlockIndexOfTransaction(tx);
+  }
+
   minePendingTransactions() {
     this.blockchainInstance.minePendingTransactions(
       this.walletKeys[0].publicKey

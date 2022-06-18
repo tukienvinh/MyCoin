@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SettingsComponent } from './settings.component';
+import { HistoryTableComponent } from './history-table.component';
 
-describe('SettingsComponent', () => {
-  let component: SettingsComponent;
-  let fixture: ComponentFixture<SettingsComponent>;
+describe('HistoryTableComponent', () => {
+  let component: HistoryTableComponent;
+  let fixture: ComponentFixture<HistoryTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SettingsComponent ]
+      declarations: [ HistoryTableComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SettingsComponent);
+    fixture = TestBed.createComponent(HistoryTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

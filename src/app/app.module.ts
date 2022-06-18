@@ -8,11 +8,12 @@ import { AppComponent } from './app.component';
 import { BlockchainViewerComponent } from './pages/blockchain-viewer/blockchain-viewer.component';
 import { BlockViewComponent } from './components/block-view/block-view.component';
 import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
-import { SettingsComponent } from './components/settings/settings.component';
 import { FormsModule } from '@angular/forms';
 import { CreateTransactionComponent } from './pages/create-transaction/create-transaction.component';
 import { PendingTransactionsComponent } from './pages/pending-transactions/pending-transactions.component';
 import { WalletBalanceComponent } from './pages/wallet-balance/wallet-balance.component';
+import { TransactionHistoryComponent } from './pages/transaction-history/transaction-history.component';
+import { HistoryTableComponent } from './components/history-table/history-table.component';
 
 @NgModule({
   declarations: [
@@ -20,10 +21,11 @@ import { WalletBalanceComponent } from './pages/wallet-balance/wallet-balance.co
     BlockchainViewerComponent,
     BlockViewComponent,
     TransactionsTableComponent,
-    SettingsComponent,
     CreateTransactionComponent,
     PendingTransactionsComponent,
-    WalletBalanceComponent
+    WalletBalanceComponent,
+    TransactionHistoryComponent,
+    HistoryTableComponent,
   ],
   imports: [
     BrowserModule,
